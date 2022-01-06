@@ -3,14 +3,16 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "yarn generate && next build",
     "start": "next start",
     "lint": "next lint",
     "db:push": "prisma db push",
     "db:seed": "prisma db seed --preview-feature",
     "db:pull": "prisma db pull",
     "studio": "prisma studio",
-    "generate:nexus": "ts-node --compiler-options '{\"module\":\"CommonJS\"}' --transpile-only graphql/schema"
+    "generate": "yarn generate:prisma && yarn generate:nexus",
+    "generate:nexus": "ts-node --compiler-options '{\"module\":\"CommonJS\"}' --transpile-only graphql/schema",
+    "generate:prisma": "prisma generate"
   },
   "prisma": {
     "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
