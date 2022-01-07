@@ -4,7 +4,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "vercel-build": "generate:prisma && prisma migrate deploy && yarn build",
+    "vercel-build": "yarn generate:prisma && prisma migrate deploy && yarn build",
     "start": "next start",
     "lint": "next lint",
     "db:push": "dotenv -e .env.local -- prisma db push",
