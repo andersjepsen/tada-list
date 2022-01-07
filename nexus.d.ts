@@ -45,6 +45,45 @@ declare global {
 }
 
 export interface NexusGenInputs {
+  AssignUserToTaskInput: { // input type
+    taskId: string; // String!
+    userId: string; // String!
+  }
+  CreateProjectInput: { // input type
+    description?: string | null; // String
+    title: string; // String!
+  }
+  CreateSectionInput: { // input type
+    projectId: string; // String!
+    title: string; // String!
+  }
+  CreateTaskInput: { // input type
+    sectionId: string; // String!
+    title: string; // String!
+  }
+  ProjectInput: { // input type
+    description?: string | null; // String
+    title?: string | null; // String
+  }
+  SectionInput: { // input type
+    title?: string | null; // String
+  }
+  TaskInput: { // input type
+    done?: boolean | null; // Boolean
+    title?: string | null; // String
+  }
+  UpdateProjectInput: { // input type
+    id: string; // String!
+    patch: NexusGenInputs['ProjectInput']; // ProjectInput!
+  }
+  UpdateSectionInput: { // input type
+    id: string; // String!
+    patch: NexusGenInputs['SectionInput']; // SectionInput!
+  }
+  UpdateTaskInput: { // input type
+    id: string; // String!
+    patch: NexusGenInputs['TaskInput']; // TaskInput!
+  }
 }
 
 export interface NexusGenEnums {
@@ -62,7 +101,59 @@ export interface NexusGenScalars {
 }
 
 export interface NexusGenObjects {
+  AssignUserToTaskPayload: { // root type
+    task?: NexusGenRootTypes['Task'] | null; // Task
+    user?: NexusGenRootTypes['User'] | null; // User
+  }
+  CreateProjectPayload: { // root type
+    project?: NexusGenRootTypes['Project'] | null; // Project
+  }
+  CreateSectionPayload: { // root type
+    section?: NexusGenRootTypes['Section'] | null; // Section
+  }
+  CreateTaskPayload: { // root type
+    task?: NexusGenRootTypes['Task'] | null; // Task
+  }
+  DeleteProjectPayload: { // root type
+    project?: NexusGenRootTypes['Project'] | null; // Project
+  }
+  DeleteSectionPayload: { // root type
+    section?: NexusGenRootTypes['Section'] | null; // Section
+  }
+  DeleteTaskPayload: { // root type
+    task?: NexusGenRootTypes['Task'] | null; // Task
+  }
+  Mutation: {};
+  Project: { // root type
+    createdAt: NexusGenScalars['DateTime']; // DateTime!
+    description?: string | null; // String
+    id: NexusGenScalars['UUID']; // UUID!
+    title: string; // String!
+    updatedAt: NexusGenScalars['DateTime']; // DateTime!
+  }
   Query: {};
+  Section: { // root type
+    createdAt: NexusGenScalars['DateTime']; // DateTime!
+    id: NexusGenScalars['UUID']; // UUID!
+    title: string; // String!
+    updatedAt: NexusGenScalars['DateTime']; // DateTime!
+  }
+  Task: { // root type
+    createdAt: NexusGenScalars['DateTime']; // DateTime!
+    done: boolean; // Boolean!
+    id: NexusGenScalars['UUID']; // UUID!
+    title: string; // String!
+    updatedAt: NexusGenScalars['DateTime']; // DateTime!
+  }
+  UpdateProjectPayload: { // root type
+    project?: NexusGenRootTypes['Project'] | null; // Project
+  }
+  UpdateSectionPayload: { // root type
+    section?: NexusGenRootTypes['Section'] | null; // Section
+  }
+  UpdateTaskPayload: { // root type
+    task?: NexusGenRootTypes['Task'] | null; // Task
+  }
   User: { // root type
     createdAt?: NexusGenScalars['DateTime'] | null; // DateTime
     email?: NexusGenScalars['EmailAddress'] | null; // EmailAddress
@@ -82,9 +173,80 @@ export type NexusGenRootTypes = NexusGenObjects
 export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars
 
 export interface NexusGenFieldTypes {
+  AssignUserToTaskPayload: { // field return type
+    task: NexusGenRootTypes['Task'] | null; // Task
+    user: NexusGenRootTypes['User'] | null; // User
+  }
+  CreateProjectPayload: { // field return type
+    project: NexusGenRootTypes['Project'] | null; // Project
+  }
+  CreateSectionPayload: { // field return type
+    section: NexusGenRootTypes['Section'] | null; // Section
+  }
+  CreateTaskPayload: { // field return type
+    task: NexusGenRootTypes['Task'] | null; // Task
+  }
+  DeleteProjectPayload: { // field return type
+    project: NexusGenRootTypes['Project'] | null; // Project
+  }
+  DeleteSectionPayload: { // field return type
+    section: NexusGenRootTypes['Section'] | null; // Section
+  }
+  DeleteTaskPayload: { // field return type
+    task: NexusGenRootTypes['Task'] | null; // Task
+  }
+  Mutation: { // field return type
+    assignUserToTask: NexusGenRootTypes['AssignUserToTaskPayload'] | null; // AssignUserToTaskPayload
+    createProject: NexusGenRootTypes['CreateProjectPayload'] | null; // CreateProjectPayload
+    createSection: NexusGenRootTypes['CreateSectionPayload'] | null; // CreateSectionPayload
+    createTask: NexusGenRootTypes['CreateTaskPayload'] | null; // CreateTaskPayload
+    deleteProject: NexusGenRootTypes['DeleteProjectPayload'] | null; // DeleteProjectPayload
+    deleteSection: NexusGenRootTypes['DeleteSectionPayload'] | null; // DeleteSectionPayload
+    deleteTask: NexusGenRootTypes['DeleteTaskPayload'] | null; // DeleteTaskPayload
+    updateProject: NexusGenRootTypes['UpdateProjectPayload'] | null; // UpdateProjectPayload
+    updateSection: NexusGenRootTypes['UpdateSectionPayload'] | null; // UpdateSectionPayload
+    updateTask: NexusGenRootTypes['UpdateTaskPayload'] | null; // UpdateTaskPayload
+  }
+  Project: { // field return type
+    createdAt: NexusGenScalars['DateTime']; // DateTime!
+    description: string | null; // String
+    id: NexusGenScalars['UUID']; // UUID!
+    sections: Array<NexusGenRootTypes['Section'] | null>; // [Section]!
+    title: string; // String!
+    updatedAt: NexusGenScalars['DateTime']; // DateTime!
+    users: Array<NexusGenRootTypes['User'] | null>; // [User]!
+  }
   Query: { // field return type
+    project: NexusGenRootTypes['Project'] | null; // Project
+    projects: Array<NexusGenRootTypes['Project'] | null>; // [Project]!
+    section: NexusGenRootTypes['Section'] | null; // Section
+    task: NexusGenRootTypes['Task'] | null; // Task
     user: NexusGenRootTypes['User'] | null; // User
     users: Array<NexusGenRootTypes['User'] | null>; // [User]!
+  }
+  Section: { // field return type
+    createdAt: NexusGenScalars['DateTime']; // DateTime!
+    id: NexusGenScalars['UUID']; // UUID!
+    tasks: Array<NexusGenRootTypes['Task'] | null>; // [Task]!
+    title: string; // String!
+    updatedAt: NexusGenScalars['DateTime']; // DateTime!
+  }
+  Task: { // field return type
+    assignee: NexusGenRootTypes['User'] | null; // User
+    createdAt: NexusGenScalars['DateTime']; // DateTime!
+    done: boolean; // Boolean!
+    id: NexusGenScalars['UUID']; // UUID!
+    title: string; // String!
+    updatedAt: NexusGenScalars['DateTime']; // DateTime!
+  }
+  UpdateProjectPayload: { // field return type
+    project: NexusGenRootTypes['Project'] | null; // Project
+  }
+  UpdateSectionPayload: { // field return type
+    section: NexusGenRootTypes['Section'] | null; // Section
+  }
+  UpdateTaskPayload: { // field return type
+    task: NexusGenRootTypes['Task'] | null; // Task
   }
   User: { // field return type
     createdAt: NexusGenScalars['DateTime'] | null; // DateTime
@@ -95,9 +257,80 @@ export interface NexusGenFieldTypes {
 }
 
 export interface NexusGenFieldTypeNames {
+  AssignUserToTaskPayload: { // field return type name
+    task: 'Task'
+    user: 'User'
+  }
+  CreateProjectPayload: { // field return type name
+    project: 'Project'
+  }
+  CreateSectionPayload: { // field return type name
+    section: 'Section'
+  }
+  CreateTaskPayload: { // field return type name
+    task: 'Task'
+  }
+  DeleteProjectPayload: { // field return type name
+    project: 'Project'
+  }
+  DeleteSectionPayload: { // field return type name
+    section: 'Section'
+  }
+  DeleteTaskPayload: { // field return type name
+    task: 'Task'
+  }
+  Mutation: { // field return type name
+    assignUserToTask: 'AssignUserToTaskPayload'
+    createProject: 'CreateProjectPayload'
+    createSection: 'CreateSectionPayload'
+    createTask: 'CreateTaskPayload'
+    deleteProject: 'DeleteProjectPayload'
+    deleteSection: 'DeleteSectionPayload'
+    deleteTask: 'DeleteTaskPayload'
+    updateProject: 'UpdateProjectPayload'
+    updateSection: 'UpdateSectionPayload'
+    updateTask: 'UpdateTaskPayload'
+  }
+  Project: { // field return type name
+    createdAt: 'DateTime'
+    description: 'String'
+    id: 'UUID'
+    sections: 'Section'
+    title: 'String'
+    updatedAt: 'DateTime'
+    users: 'User'
+  }
   Query: { // field return type name
+    project: 'Project'
+    projects: 'Project'
+    section: 'Section'
+    task: 'Task'
     user: 'User'
     users: 'User'
+  }
+  Section: { // field return type name
+    createdAt: 'DateTime'
+    id: 'UUID'
+    tasks: 'Task'
+    title: 'String'
+    updatedAt: 'DateTime'
+  }
+  Task: { // field return type name
+    assignee: 'User'
+    createdAt: 'DateTime'
+    done: 'Boolean'
+    id: 'UUID'
+    title: 'String'
+    updatedAt: 'DateTime'
+  }
+  UpdateProjectPayload: { // field return type name
+    project: 'Project'
+  }
+  UpdateSectionPayload: { // field return type name
+    section: 'Section'
+  }
+  UpdateTaskPayload: { // field return type name
+    task: 'Task'
   }
   User: { // field return type name
     createdAt: 'DateTime'
@@ -108,7 +341,48 @@ export interface NexusGenFieldTypeNames {
 }
 
 export interface NexusGenArgTypes {
+  Mutation: {
+    assignUserToTask: { // args
+      input: NexusGenInputs['AssignUserToTaskInput']; // AssignUserToTaskInput!
+    }
+    createProject: { // args
+      input: NexusGenInputs['CreateProjectInput']; // CreateProjectInput!
+    }
+    createSection: { // args
+      input: NexusGenInputs['CreateSectionInput']; // CreateSectionInput!
+    }
+    createTask: { // args
+      input: NexusGenInputs['CreateTaskInput']; // CreateTaskInput!
+    }
+    deleteProject: { // args
+      id: string; // ID!
+    }
+    deleteSection: { // args
+      id: string; // ID!
+    }
+    deleteTask: { // args
+      id: string; // ID!
+    }
+    updateProject: { // args
+      input: NexusGenInputs['UpdateProjectInput']; // UpdateProjectInput!
+    }
+    updateSection: { // args
+      input: NexusGenInputs['UpdateSectionInput']; // UpdateSectionInput!
+    }
+    updateTask: { // args
+      input: NexusGenInputs['UpdateTaskInput']; // UpdateTaskInput!
+    }
+  }
   Query: {
+    project: { // args
+      id: NexusGenScalars['UUID']; // UUID!
+    }
+    section: { // args
+      id: NexusGenScalars['UUID']; // UUID!
+    }
+    task: { // args
+      id: NexusGenScalars['UUID']; // UUID!
+    }
     user: { // args
       id: NexusGenScalars['UUID']; // UUID!
     }
@@ -123,7 +397,7 @@ export interface NexusGenTypeInterfaces {
 
 export type NexusGenObjectNames = keyof NexusGenObjects;
 
-export type NexusGenInputNames = never;
+export type NexusGenInputNames = keyof NexusGenInputs;
 
 export type NexusGenEnumNames = never;
 
