@@ -15,4 +15,38 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   email     String  @unique
+  projects  Project[]
+  tasks     Task[]
+}
+
+model Project {
+  id          String    @id @default(uuid())
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  title       String
+  description String?
+  users       User[]
+  sections    Section[]
+}
+
+model Section {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  title     String
+  tasks     Task[]
+  Project   Project? @relation(fields: [projectId], references: [id])
+  projectId String?
+}
+
+model Task {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  title     String
+  done      Boolean  @default(false)
+  assignee  User?    @relation(fields: [userId], references: [id])
+  userId    String?
+  section   Section  @relation(fields: [sectionId], references: [id])
+  sectionId String
 }
