@@ -10,6 +10,7 @@
     "db:push": "dotenv -e .env.local -- prisma db push",
     "db:seed": "dotenv -e .env.local -- prisma db seed --preview-feature",
     "db:pull": "dotenv -e .env.local -- prisma db pull",
+    "migrate:dev": "dotenv -e .env.local -- prisma migrate dev",
     "studio": "dotenv -e .env.local -- prisma studio",
     "generate": "yarn generate:prisma && yarn generate:nexus",
     "generate:nexus": "ts-node --compiler-options '{\"module\":\"CommonJS\"}' --transpile-only graphql/schema",
