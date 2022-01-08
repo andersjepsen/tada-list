@@ -1,0 +1,16 @@
+overwrite: true
+schema: "generated/schema.graphql"
+documents: [pages/**/*.tsx]
+generates:
+  generated/graphql.ts:
+    plugins:
+      - "typescript"
+      - "typescript-operations"
+  generated/graphql.schema.json:
+    plugins:
+      - "introspection"
+config:
+  scalars:
+    DateTime: string
+    EmailAddress: string
+    UUID: string
