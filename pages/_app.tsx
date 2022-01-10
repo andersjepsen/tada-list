@@ -3,10 +3,16 @@ import type { AppProps } from "next/app";
 import { ApolloProvider, gql, useQuery } from "@apollo/client";
 import client from "../lib/apollo";
 import { GetProjectsQuery } from "../generated/graphql";
+import Head from "next/head";
+import Link from "next/link";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <ApolloProvider client={client}>
+      <Head>
+        <title>🎉 Tada List</title>
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
       <Content>
         <Component {...pageProps} />
       </Content>
@@ -24,9 +30,17 @@ const GET_PROJECTS = gql`
 `;
 
 function Content({ children }: { children: React.ReactNode }) {
-  const { data } = useQuery<GetProjectsQuery>(GET_PROJECTS);
+  const { data, loading, error } = useQuery<GetProjectsQuery>(GET_PROJECTS);
+
+  if (error) {
+    throw error;
+  }
+
+  if (loading) {
+    return <div>loading...</div>;
+  }
   return (
-    <div className="flex relative min-h-screen">
+    <div className="flex min-h-screen">
       <aside className="w-60 bg-gray-100 h-screen py-4 pl-4 border-r-2 border-r-gray-200">
         <div className="flex space-x-2 items-center text-xl font-bold pb-4">
           <div className="text-2xl">🎉</div>
@@ -37,7 +51,18 @@ function Content({ children }: { children: React.ReactNode }) {
             <div className="flex justify-between items-center space-x-2 mr-2">
               <h1 className="font-bold pl-2">Projects</h1>
               <button className="text-slate-500 px-2 rounded-full hover:bg-gray-200 text-xl">
-                +
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-5 w-5"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
+                    clipRule="evenodd"
+                  />
+                </svg>
               </button>
             </div>
           </div>
@@ -47,13 +72,17 @@ function Content({ children }: { children: React.ReactNode }) {
                 className="p-2 hover:bg-gray-200 rounded-lg"
                 key={project?.id}
               >
-                {project?.title}
+                <Link
+                  href={`/projects/${encodeURIComponent(project?.id ?? "")}`}
+                >
+                  {project?.title}
+                </Link>
               </li>
             ))}
           </ul>
         </nav>
       </aside>
-      <section className="flex-1 h-screen overflow-y-scroll px-4 py-2">
+      <section className="flex-1 h-screen overflow-y-scroll p-4">
         {children}
       </section>
     </div>

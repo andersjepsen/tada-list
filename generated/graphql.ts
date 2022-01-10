@@ -254,3 +254,10 @@ export type GetProjectsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetProjectsQuery = { __typename?: 'Query', projects: Array<{ __typename?: 'Project', id: string, title: string } | null | undefined> };
+
+export type GetProjectQueryVariables = Exact<{
+  id: Scalars['UUID'];
+}>;
+
+
+export type GetProjectQuery = { __typename?: 'Query', project?: { __typename?: 'Project', id: string, title: string, sections: Array<{ __typename?: 'Section', id: string, title: string } | null | undefined> } | null | undefined };
