@@ -5,6 +5,7 @@ import client from "../lib/apollo";
 import { GetProjectsQuery } from "../generated/graphql";
 import Head from "next/head";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
@@ -32,6 +33,10 @@ const GET_PROJECTS = gql`
 function Content({ children }: { children: React.ReactNode }) {
   const { data, loading, error } = useQuery<GetProjectsQuery>(GET_PROJECTS);
 
+  const router = useRouter();
+
+  const projectId = router.query?.projectId?.toString() ?? "";
+
   if (error) {
     throw error;
   }
@@ -42,10 +47,12 @@ function Content({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex min-h-screen">
       <aside className="w-60 bg-gray-100 h-screen py-4 pl-4 border-r-2 border-r-gray-200">
-        <div className="flex space-x-2 items-center text-xl font-bold pb-4">
-          <div className="text-2xl">🎉</div>
-          <h1>Tada List</h1>
-        </div>
+        <Link href="/" passHref>
+          <div className="flex space-x-2 items-center text-xl font-bold pb-4 hover:cursor-pointer">
+            <div className="text-2xl">🎉</div>
+            <h1>Tada List</h1>
+          </div>
+        </Link>
         <nav>
           <div className="border-b-2 border-b-gray-200 pb-2">
             <div className="flex justify-between items-center space-x-2 mr-2">
@@ -68,16 +75,19 @@ function Content({ children }: { children: React.ReactNode }) {
           </div>
           <ul className="mr-2 py-2">
             {data?.projects.map((project) => (
-              <li
-                className="p-2 hover:bg-gray-200 rounded-lg"
+              <Link
+                href={`/projects/${encodeURIComponent(project?.id ?? "")}`}
                 key={project?.id}
+                passHref
               >
-                <Link
-                  href={`/projects/${encodeURIComponent(project?.id ?? "")}`}
+                <li
+                  className={`p-2 rounded-lg hover:bg-gray-200 hover:cursor-pointer ${
+                    projectId === project?.id ? "bg-gray-50 font-semibold" : ""
+                  }`}
                 >
                   {project?.title}
-                </Link>
-              </li>
+                </li>
+              </Link>
             ))}
           </ul>
         </nav>
