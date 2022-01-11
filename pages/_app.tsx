@@ -6,6 +6,7 @@ import { GetProjectsQuery } from "../generated/graphql";
 import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { Plus } from "../icons";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
@@ -58,34 +59,23 @@ function Content({ children }: { children: React.ReactNode }) {
             <div className="flex justify-between items-center space-x-2 mr-2">
               <h1 className="font-bold pl-2">Projects</h1>
               <button className="text-slate-500 px-2 rounded-full hover:bg-gray-200 text-xl">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
-                    clipRule="evenodd"
-                  />
-                </svg>
+                <Plus />
               </button>
             </div>
           </div>
           <ul className="mr-2 py-2">
             {data?.projects.map((project) => (
               <Link
-                href={`/projects/${encodeURIComponent(project?.id ?? "")}`}
-                key={project?.id}
+                href={`/projects/${encodeURIComponent(project.id)}`}
+                key={project.id}
                 passHref
               >
                 <li
                   className={`p-2 rounded-lg hover:bg-gray-200 hover:cursor-pointer ${
-                    projectId === project?.id ? "bg-gray-50 font-semibold" : ""
+                    projectId === project.id ? "bg-gray-50 font-semibold" : ""
                   }`}
                 >
-                  {project?.title}
+                  {project.title}
                 </li>
               </Link>
             ))}
