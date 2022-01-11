@@ -72,8 +72,7 @@ function Section({ section }: { section: ProjectSectionFragment }) {
         id: `${section.__typename}:${section.id}`,
         fragment: Section.fragments.section,
         data: {
-          id: section.id,
-          title: section.title,
+          ...section,
           tasks: newTasks,
         },
       });
@@ -101,8 +100,7 @@ function Section({ section }: { section: ProjectSectionFragment }) {
         id: `${section.__typename}:${section.id}`,
         fragment: Section.fragments.section,
         data: {
-          id: section.id,
-          title: section.title,
+          ...section,
           tasks: newTasks,
         },
       });
@@ -164,12 +162,18 @@ function Section({ section }: { section: ProjectSectionFragment }) {
         ))}
         {createNew && (
           <li className="flex items-center space-x-2 py-3 border-b-2 border-b-gray-200 hover:bg-gray-50">
-            <input type="text" onBlur={(e) => handleCreate(e)} />
+            <input
+              className="w-full rounded p-1"
+              type="text"
+              onBlur={handleCreate}
+              autoFocus
+              placeholder="Write a task..."
+            />
           </li>
         )}
       </ol>
       <button
-        className="flex items-center space-x-1 p-2 rounded-lg hover:bg-gray-100"
+        className="flex items-center space-x-1 p-2 rounded-lg text-slate-500 hover:bg-gray-100"
         onClick={() => setCreateNew(true)}
         disabled={createNew}
       >
