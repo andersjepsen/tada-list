@@ -260,4 +260,4 @@ export type GetProjectQueryVariables = Exact<{
 }>;
 
 
-export type GetProjectQuery = { __typename?: 'Query', project?: { __typename?: 'Project', id: string, title: string, sections: Array<{ __typename?: 'Section', id: string, title: string } | null | undefined> } | null | undefined };
+export type GetProjectQuery = { __typename?: 'Query', project?: { __typename?: 'Project', id: string, title: string, sections: Array<{ __typename?: 'Section', id: string, title: string, tasks: Array<{ __typename?: 'Task', id: string, title: string } | null | undefined> } | null | undefined> } | null | undefined };

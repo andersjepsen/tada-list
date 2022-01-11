@@ -15,6 +15,10 @@ const GET_PROJECT = gql`
       sections {
         id
         title
+        tasks {
+          id
+          title
+        }
       }
     }
   }
@@ -61,7 +65,7 @@ const ProjectPage: NextPage = () => {
 
       {data?.project?.sections.map((section) => (
         <div className="pb-4" key={section?.id}>
-          <div className="flex justify-between items-center">
+          <div className="flex justify-between items-center pb-2">
             <h2 className="text-lg font-semibold">{section?.title}</h2>
             <button className="text-slate-500 px-2 rounded-full hover:bg-gray-200 text-xl">
               <svg
@@ -74,6 +78,21 @@ const ProjectPage: NextPage = () => {
               </svg>
             </button>
           </div>
+          <ol>
+            {section?.tasks.map((task) => (
+              <li
+                className="flex items-center space-x-2 py-3 border-b-2 border-b-gray-200 hover:bg-gray-50"
+                key={task?.id}
+              >
+                <input
+                  type="checkbox"
+                  className="appearance-none h-5 w-5 bg-white border-2 rounded-full border-gray-400 checked:border-blue-600 checked:bg-blue-500 hover:cursor-pointer"
+                  id={task?.id}
+                />
+                <label htmlFor={task?.id}>{task?.title}</label>
+              </li>
+            ))}
+          </ol>
         </div>
       ))}
     </main>
