@@ -250,6 +250,13 @@ export type User = {
   name?: Maybe<Scalars['String']>;
 };
 
+export type CreateProjectMutationVariables = Exact<{
+  input: CreateProjectInput;
+}>;
+
+
+export type CreateProjectMutation = { __typename?: 'Mutation', createProject?: { __typename?: 'CreateProjectPayload', project?: { __typename?: 'Project', id: string, title: string } | null | undefined } | null | undefined };
+
 export type GetProjectsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -267,7 +274,7 @@ export type DeleteTaskMutationVariables = Exact<{
 }>;
 
 
-export type DeleteTaskMutation = { __typename?: 'Mutation', deleteTask?: { __typename?: 'DeleteTaskPayload', task?: { __typename?: 'Task', id: string, title: string } | null | undefined } | null | undefined };
+export type DeleteTaskMutation = { __typename?: 'Mutation', deleteTask?: { __typename?: 'DeleteTaskPayload', task?: { __typename?: 'Task', id: string } | null | undefined } | null | undefined };
 
 export type ProjectSectionFragment = { __typename?: 'Section', id: string, title: string, tasks: Array<{ __typename?: 'Task', id: string, title: string }> };
 
