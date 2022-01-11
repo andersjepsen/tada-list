@@ -39,7 +39,7 @@ export const Project = objectType({
               id: parent.id,
             },
           })
-          .sections();
+          .sections({ orderBy: [{ createdAt: "asc" }] });
       },
     });
   },
@@ -50,7 +50,7 @@ export const projectsQueryField = queryField((t) => {
     type: nonNull(Project),
 
     resolve(_parent, _args, ctx) {
-      return ctx.prisma.project.findMany();
+      return ctx.prisma.project.findMany({ orderBy: [{ createdAt: "asc" }] });
     },
   });
 });

@@ -11,6 +11,10 @@ import {
   GetProjectQuery,
   GetProjectQueryVariables,
   ProjectSectionFragment,
+  UpdateProjectMutation,
+  UpdateProjectMutationVariables,
+  UpdateSectionMutation,
+  UpdateSectionMutationVariables,
 } from "../../generated/graphql";
 import { Delete, More, Plus } from "../../icons";
 
@@ -35,6 +39,17 @@ const DELETE_TASK = gql`
   }
 `;
 
+const UPDATE_SECTION = gql`
+  mutation UpdateSection($input: UpdateSectionInput!) {
+    updateSection(input: $input) {
+      section {
+        id
+        title
+      }
+    }
+  }
+`;
+
 Section.fragments = {
   section: gql`
     fragment ProjectSection on Section {
@@ -50,6 +65,7 @@ Section.fragments = {
 
 function Section({ section }: { section: ProjectSectionFragment }) {
   const [createNew, setCreateNew] = React.useState(false);
+  const [updateTitle, setUpdateTitle] = React.useState(false);
 
   const [createTask] = useMutation<
     CreateTaskMutation,
@@ -107,6 +123,11 @@ function Section({ section }: { section: ProjectSectionFragment }) {
     },
   });
 
+  const [updateSection] = useMutation<
+    UpdateSectionMutation,
+    UpdateSectionMutationVariables
+  >(UPDATE_SECTION);
+
   const handleCreate = async (event: React.FocusEvent<HTMLInputElement>) => {
     const title = event.target.value;
 
@@ -128,10 +149,41 @@ function Section({ section }: { section: ProjectSectionFragment }) {
     deleteTask({ variables: { id } });
   };
 
+  const handleUpdateTitle = async (
+    event: React.FocusEvent<HTMLInputElement>
+  ) => {
+    const title = event.target.value;
+
+    if (title && title !== section.title) {
+      await updateSection({
+        variables: {
+          input: { id: section.id, patch: { title } },
+        },
+      });
+    }
+
+    setUpdateTitle(false);
+  };
+
   return (
     <div className="pb-4" key={section?.id}>
       <div className="flex justify-between items-center pb-2">
-        <h2 className="text-lg font-semibold">{section.title}</h2>
+        {updateTitle ? (
+          <input
+            className="text-lg font-semibold rounded"
+            defaultValue={section.title}
+            autoFocus
+            onBlur={handleUpdateTitle}
+          />
+        ) : (
+          <h2
+            className="text-lg font-semibold hover:-mb-0.5 hover:border-b-2 hover:border-gray-200 hover:cursor-text"
+            onClick={() => setUpdateTitle(true)}
+          >
+            {section.title}
+          </h2>
+        )}
+
         <button className="text-slate-500 px-2 rounded-full hover:bg-gray-200 text-xl">
           <More />
         </button>
@@ -183,6 +235,17 @@ function Section({ section }: { section: ProjectSectionFragment }) {
   );
 }
 
+const UPDATE_PROJECT = gql`
+  mutation UpdateProject($input: UpdateProjectInput!) {
+    updateProject(input: $input) {
+      project {
+        id
+        title
+      }
+    }
+  }
+`;
+
 const GET_PROJECT = gql`
   ${Section.fragments.section}
   query GetProject($id: UUID!) {
@@ -198,6 +261,8 @@ const GET_PROJECT = gql`
 `;
 
 const ProjectPage: NextPage = () => {
+  const [updateTitle, setUpdateTitle] = React.useState(false);
+
   const router = useRouter();
 
   const projectId = router.query?.projectId?.toString() ?? "";
@@ -207,6 +272,27 @@ const ProjectPage: NextPage = () => {
     GetProjectQuery,
     GetProjectQueryVariables
   >(GET_PROJECT, { variables: { id: projectId }, skip });
+
+  const [updateProject] = useMutation<
+    UpdateProjectMutation,
+    UpdateProjectMutationVariables
+  >(UPDATE_PROJECT);
+
+  const handleUpdateTitle = async (
+    event: React.FocusEvent<HTMLInputElement>
+  ) => {
+    const title = event.target.value;
+
+    if (title && title !== data?.project?.title) {
+      await updateProject({
+        variables: {
+          input: { id: projectId, patch: { title } },
+        },
+      });
+    }
+
+    setUpdateTitle(false);
+  };
 
   if (error) {
     throw error;
@@ -222,7 +308,21 @@ const ProjectPage: NextPage = () => {
         <title>{data?.project?.title}</title>
       </Head>
       <div className="flex justify-between items-center pb-6">
-        <h1 className="text-xl font-bold">{data?.project?.title}</h1>
+        {updateTitle ? (
+          <input
+            className="text-xl font-bold rounded"
+            defaultValue={data?.project?.title}
+            autoFocus
+            onBlur={handleUpdateTitle}
+          />
+        ) : (
+          <h1
+            className="text-xl font-bold hover:-mb-0.5 hover:border-b-2 hover:border-gray-200 hover:cursor-text"
+            onClick={() => setUpdateTitle(true)}
+          >
+            {data?.project?.title}
+          </h1>
+        )}
 
         <button className="text-slate-500 px-2 rounded-full hover:bg-gray-200 text-xl">
           <More />

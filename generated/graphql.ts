@@ -276,7 +276,21 @@ export type DeleteTaskMutationVariables = Exact<{
 
 export type DeleteTaskMutation = { __typename?: 'Mutation', deleteTask?: { __typename?: 'DeleteTaskPayload', task?: { __typename?: 'Task', id: string } | null | undefined } | null | undefined };
 
+export type UpdateSectionMutationVariables = Exact<{
+  input: UpdateSectionInput;
+}>;
+
+
+export type UpdateSectionMutation = { __typename?: 'Mutation', updateSection?: { __typename?: 'UpdateSectionPayload', section?: { __typename?: 'Section', id: string, title: string } | null | undefined } | null | undefined };
+
 export type ProjectSectionFragment = { __typename?: 'Section', id: string, title: string, tasks: Array<{ __typename?: 'Task', id: string, title: string }> };
+
+export type UpdateProjectMutationVariables = Exact<{
+  input: UpdateProjectInput;
+}>;
+
+
+export type UpdateProjectMutation = { __typename?: 'Mutation', updateProject?: { __typename?: 'UpdateProjectPayload', project?: { __typename?: 'Project', id: string, title: string } | null | undefined } | null | undefined };
 
 export type GetProjectQueryVariables = Exact<{
   id: Scalars['UUID'];
