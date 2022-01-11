@@ -16,7 +16,7 @@ export const Section = objectType({
     t.nonNull.dateTime("createdAt");
     t.nonNull.dateTime("updatedAt");
     t.nonNull.list.field("tasks", {
-      type: Task,
+      type: nonNull(Task),
       async resolve(parent, _args, ctx) {
         return await ctx.prisma.section
           .findUnique({

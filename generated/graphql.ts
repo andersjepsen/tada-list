@@ -120,7 +120,7 @@ export type MutationDeleteSectionArgs = {
 
 
 export type MutationDeleteTaskArgs = {
-  id: Scalars['ID'];
+  id: Scalars['UUID'];
 };
 
 
@@ -143,7 +143,7 @@ export type Project = {
   createdAt: Scalars['DateTime'];
   description?: Maybe<Scalars['String']>;
   id: Scalars['UUID'];
-  sections: Array<Maybe<Section>>;
+  sections: Array<Section>;
   title: Scalars['String'];
   updatedAt: Scalars['DateTime'];
   users: Array<Maybe<User>>;
@@ -157,7 +157,7 @@ export type ProjectInput = {
 export type Query = {
   __typename?: 'Query';
   project?: Maybe<Project>;
-  projects: Array<Maybe<Project>>;
+  projects: Array<Project>;
   section?: Maybe<Section>;
   task?: Maybe<Task>;
   user?: Maybe<User>;
@@ -188,7 +188,7 @@ export type Section = {
   __typename?: 'Section';
   createdAt: Scalars['DateTime'];
   id: Scalars['UUID'];
-  tasks: Array<Maybe<Task>>;
+  tasks: Array<Task>;
   title: Scalars['String'];
   updatedAt: Scalars['DateTime'];
 };
@@ -253,11 +253,27 @@ export type User = {
 export type GetProjectsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetProjectsQuery = { __typename?: 'Query', projects: Array<{ __typename?: 'Project', id: string, title: string } | null | undefined> };
+export type GetProjectsQuery = { __typename?: 'Query', projects: Array<{ __typename?: 'Project', id: string, title: string }> };
+
+export type CreateTaskMutationVariables = Exact<{
+  input: CreateTaskInput;
+}>;
+
+
+export type CreateTaskMutation = { __typename?: 'Mutation', createTask?: { __typename?: 'CreateTaskPayload', task?: { __typename?: 'Task', id: string, title: string } | null | undefined } | null | undefined };
+
+export type DeleteTaskMutationVariables = Exact<{
+  id: Scalars['UUID'];
+}>;
+
+
+export type DeleteTaskMutation = { __typename?: 'Mutation', deleteTask?: { __typename?: 'DeleteTaskPayload', task?: { __typename?: 'Task', id: string, title: string } | null | undefined } | null | undefined };
+
+export type ProjectSectionFragment = { __typename?: 'Section', id: string, title: string, tasks: Array<{ __typename?: 'Task', id: string, title: string }> };
 
 export type GetProjectQueryVariables = Exact<{
   id: Scalars['UUID'];
 }>;
 
 
-export type GetProjectQuery = { __typename?: 'Query', project?: { __typename?: 'Project', id: string, title: string, sections: Array<{ __typename?: 'Section', id: string, title: string, tasks: Array<{ __typename?: 'Task', id: string, title: string } | null | undefined> } | null | undefined> } | null | undefined };
+export type GetProjectQuery = { __typename?: 'Query', project?: { __typename?: 'Project', id: string, title: string, sections: Array<{ __typename?: 'Section', id: string, title: string, tasks: Array<{ __typename?: 'Task', id: string, title: string }> }> } | null | undefined };

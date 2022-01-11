@@ -211,14 +211,14 @@ export interface NexusGenFieldTypes {
     createdAt: NexusGenScalars['DateTime']; // DateTime!
     description: string | null; // String
     id: NexusGenScalars['UUID']; // UUID!
-    sections: Array<NexusGenRootTypes['Section'] | null>; // [Section]!
+    sections: NexusGenRootTypes['Section'][]; // [Section!]!
     title: string; // String!
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
     users: Array<NexusGenRootTypes['User'] | null>; // [User]!
   }
   Query: { // field return type
     project: NexusGenRootTypes['Project'] | null; // Project
-    projects: Array<NexusGenRootTypes['Project'] | null>; // [Project]!
+    projects: NexusGenRootTypes['Project'][]; // [Project!]!
     section: NexusGenRootTypes['Section'] | null; // Section
     task: NexusGenRootTypes['Task'] | null; // Task
     user: NexusGenRootTypes['User'] | null; // User
@@ -227,7 +227,7 @@ export interface NexusGenFieldTypes {
   Section: { // field return type
     createdAt: NexusGenScalars['DateTime']; // DateTime!
     id: NexusGenScalars['UUID']; // UUID!
-    tasks: Array<NexusGenRootTypes['Task'] | null>; // [Task]!
+    tasks: NexusGenRootTypes['Task'][]; // [Task!]!
     title: string; // String!
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
   }
@@ -361,7 +361,7 @@ export interface NexusGenArgTypes {
       id: string; // ID!
     }
     deleteTask: { // args
-      id: string; // ID!
+      id: NexusGenScalars['UUID']; // UUID!
     }
     updateProject: { // args
       input: NexusGenInputs['UpdateProjectInput']; // UpdateProjectInput!

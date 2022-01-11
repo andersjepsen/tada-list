@@ -31,7 +31,7 @@ export const Project = objectType({
     });
 
     t.nonNull.list.field("sections", {
-      type: Section,
+      type: nonNull(Section),
       async resolve(parent, _args, ctx) {
         return await ctx.prisma.project
           .findUnique({
@@ -47,7 +47,7 @@ export const Project = objectType({
 
 export const projectsQueryField = queryField((t) => {
   t.nonNull.list.field("projects", {
-    type: Project,
+    type: nonNull(Project),
 
     resolve(_parent, _args, ctx) {
       return ctx.prisma.project.findMany();

@@ -68,7 +68,7 @@ type Mutation {
   createTask(input: CreateTaskInput!): CreateTaskPayload
   deleteProject(id: ID!): DeleteProjectPayload
   deleteSection(id: ID!): DeleteSectionPayload
-  deleteTask(id: ID!): DeleteTaskPayload
+  deleteTask(id: UUID!): DeleteTaskPayload
   updateProject(input: UpdateProjectInput!): UpdateProjectPayload
   updateSection(input: UpdateSectionInput!): UpdateSectionPayload
   updateTask(input: UpdateTaskInput!): UpdateTaskPayload
@@ -78,7 +78,7 @@ type Project {
   createdAt: DateTime!
   description: String
   id: UUID!
-  sections: [Section]!
+  sections: [Section!]!
   title: String!
   updatedAt: DateTime!
   users: [User]!
@@ -91,7 +91,7 @@ input ProjectInput {
 
 type Query {
   project(id: UUID!): Project
-  projects: [Project]!
+  projects: [Project!]!
   section(id: UUID!): Section
   task(id: UUID!): Task
   user(id: UUID!): User
@@ -101,7 +101,7 @@ type Query {
 type Section {
   createdAt: DateTime!
   id: UUID!
-  tasks: [Task]!
+  tasks: [Task!]!
   title: String!
   updatedAt: DateTime!
 }

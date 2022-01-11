@@ -128,7 +128,7 @@ export const DeleteTaskPayload = objectType({
 export const deleteTask = mutationField("deleteTask", {
   type: DeleteTaskPayload,
   args: {
-    id: nonNull(idArg()),
+    id: nonNull("UUID"),
   },
   resolve: async (_parent, args, ctx) => {
     const task = await ctx.prisma.task.delete({ where: { id: args.id } });
