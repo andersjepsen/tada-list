@@ -110,12 +110,12 @@ export type MutationCreateTaskArgs = {
 
 
 export type MutationDeleteProjectArgs = {
-  id: Scalars['ID'];
+  id: Scalars['UUID'];
 };
 
 
 export type MutationDeleteSectionArgs = {
-  id: Scalars['ID'];
+  id: Scalars['UUID'];
 };
 
 

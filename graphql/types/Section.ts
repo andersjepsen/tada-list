@@ -125,7 +125,7 @@ export const DeleteSectionPayload = objectType({
 export const deleteSection = mutationField("deleteSection", {
   type: DeleteSectionPayload,
   args: {
-    id: nonNull(idArg()),
+    id: nonNull("UUID"),
   },
   resolve: async (_parent, args, ctx) => {
     const section = await ctx.prisma.section.delete({ where: { id: args.id } });

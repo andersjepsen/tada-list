@@ -152,7 +152,7 @@ export const DeleteProjectPayload = objectType({
 export const deleteProject = mutationField("deleteProject", {
   type: DeleteProjectPayload,
   args: {
-    id: nonNull(idArg()),
+    id: nonNull("UUID"),
   },
   resolve: async (_parent, args, ctx) => {
     const project = await ctx.prisma.project.delete({ where: { id: args.id } });

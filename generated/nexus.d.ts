@@ -355,10 +355,10 @@ export interface NexusGenArgTypes {
       input: NexusGenInputs['CreateTaskInput']; // CreateTaskInput!
     }
     deleteProject: { // args
-      id: string; // ID!
+      id: NexusGenScalars['UUID']; // UUID!
     }
     deleteSection: { // args
-      id: string; // ID!
+      id: NexusGenScalars['UUID']; // UUID!
     }
     deleteTask: { // args
       id: NexusGenScalars['UUID']; // UUID!

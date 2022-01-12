@@ -66,8 +66,8 @@ type Mutation {
   createProject(input: CreateProjectInput!): CreateProjectPayload
   createSection(input: CreateSectionInput!): CreateSectionPayload
   createTask(input: CreateTaskInput!): CreateTaskPayload
-  deleteProject(id: ID!): DeleteProjectPayload
-  deleteSection(id: ID!): DeleteSectionPayload
+  deleteProject(id: UUID!): DeleteProjectPayload
+  deleteSection(id: UUID!): DeleteSectionPayload
   deleteTask(id: UUID!): DeleteTaskPayload
   updateProject(input: UpdateProjectInput!): UpdateProjectPayload
   updateSection(input: UpdateSectionInput!): UpdateSectionPayload
