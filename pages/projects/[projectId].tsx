@@ -145,7 +145,7 @@ function Section({ section }: { section: ProjectSectionFragment }) {
     setCreateNew(false);
   };
 
-  const handleDelete = (id: string) => {
+  const handleDeleteTask = (id: string) => {
     deleteTask({ variables: { id } });
   };
 
@@ -166,8 +166,11 @@ function Section({ section }: { section: ProjectSectionFragment }) {
   };
 
   return (
-    <div className="pb-4" key={section?.id}>
-      <div className="flex justify-between items-center pb-2">
+    <div
+      className="mb-4 rounded-lg hover:border-2 hover:p-2 hover:-mt-2.5 hover:mb-1.5 hover:-mx-2.5 hover:shadow-sm"
+      key={section?.id}
+    >
+      <div className="group flex justify-between items-center pb-2">
         {updateTitle ? (
           <input
             className="text-lg font-semibold rounded"
@@ -183,10 +186,11 @@ function Section({ section }: { section: ProjectSectionFragment }) {
             {section.title}
           </h2>
         )}
-
-        <button className="text-slate-500 px-2 rounded-full hover:bg-gray-200 text-xl">
-          <More />
-        </button>
+        <div className="invisible group-hover:visible">
+          <button className="text-slate-500 px-2 rounded-full hover:bg-gray-200 text-xl">
+            <Delete />
+          </button>
+        </div>
       </div>
       <ol className="pb-3">
         {section.tasks.map((task) => (
@@ -205,7 +209,7 @@ function Section({ section }: { section: ProjectSectionFragment }) {
             <div className="invisible group-hover:visible">
               <button
                 className="text-slate-500 px-2 rounded-full hover:bg-gray-200 text-xl"
-                onClick={() => handleDelete(task.id)}
+                onClick={() => handleDeleteTask(task.id)}
               >
                 <Delete />
               </button>
@@ -229,7 +233,8 @@ function Section({ section }: { section: ProjectSectionFragment }) {
         onClick={() => setCreateNew(true)}
         disabled={createNew}
       >
-        <Plus /> <span>Add Task</span>
+        <Plus />
+        <span>Add Task</span>
       </button>
     </div>
   );
