@@ -9,13 +9,14 @@ import {
   UpdateSectionInput,
 } from "../generated/graphql";
 import { Delete, Plus } from "../icons";
+import { TaskList } from "./TaskList";
 
 const CREATE_TASK = gql`
+  ${TaskList.Item.fragments.task}
   mutation CreateTask($input: CreateTaskInput!) {
     createTask(input: $input) {
       task {
-        id
-        title
+        ...TaskListItem
       }
     }
   }
@@ -33,12 +34,13 @@ const DELETE_TASK = gql`
 
 Section.fragments = {
   section: gql`
+    ${TaskList.Item.fragments.task}
     fragment Section on Section {
       id
       title
       tasks {
         id
-        title
+        ...TaskListItem
       }
     }
   `,
@@ -67,6 +69,7 @@ function Section({ section, onUpdate, onDelete }: SectionProps) {
         cache.readFragment<SectionFragment>({
           id: `${section.__typename}:${section.id}`,
           fragment: Section.fragments.section,
+          fragmentName: "Section",
         })?.tasks ?? [];
 
       const newTasks = [...existingTasks, response];
@@ -74,6 +77,7 @@ function Section({ section, onUpdate, onDelete }: SectionProps) {
       cache.writeFragment<SectionFragment>({
         id: `${section.__typename}:${section.id}`,
         fragment: Section.fragments.section,
+        fragmentName: "Section",
         data: {
           ...section,
           tasks: newTasks,
@@ -95,6 +99,7 @@ function Section({ section, onUpdate, onDelete }: SectionProps) {
         cache.readFragment<SectionFragment>({
           id: `${section.__typename}:${section.id}`,
           fragment: Section.fragments.section,
+          fragmentName: "Section",
         })?.tasks ?? [];
 
       const newTasks = existingTasks.filter((task) => task?.id !== response.id);
@@ -102,6 +107,7 @@ function Section({ section, onUpdate, onDelete }: SectionProps) {
       cache.writeFragment<SectionFragment>({
         id: `${section.__typename}:${section.id}`,
         fragment: Section.fragments.section,
+        fragmentName: "Section",
         data: {
           ...section,
           tasks: newTasks,
@@ -127,10 +133,6 @@ function Section({ section, onUpdate, onDelete }: SectionProps) {
     setCreateNew(false);
   };
 
-  const handleDeleteTask = (id: string) => {
-    deleteTask({ variables: { id } });
-  };
-
   const handleUpdateTitle = (event: React.FocusEvent<HTMLInputElement>) => {
     const title = event.target.value;
 
@@ -139,10 +141,6 @@ function Section({ section, onUpdate, onDelete }: SectionProps) {
     }
 
     setUpdateTitle(false);
-  };
-
-  const handleDeleteSection = () => {
-    onDelete(section.id);
   };
 
   return (
@@ -169,35 +167,19 @@ function Section({ section, onUpdate, onDelete }: SectionProps) {
         <div className="invisible group-hover:visible">
           <button
             className="text-slate-500 px-2 rounded-full hover:bg-gray-200 text-xl"
-            onClick={handleDeleteSection}
+            onClick={() => onDelete(section.id)}
           >
             <Delete />
           </button>
         </div>
       </div>
-      <ol className="pb-3">
+      <TaskList>
         {section.tasks.map((task) => (
-          <li
-            className="group flex items-center justify-between space-x-2 py-3 border-b-2 border-b-gray-200 hover:bg-gray-50"
+          <TaskList.Item
             key={task.id}
-          >
-            <div className="flex items-center space-x-2">
-              <input
-                type="checkbox"
-                className="appearance-none h-5 w-5 bg-white border-2 rounded-full border-gray-400 checked:border-blue-600 checked:bg-blue-500 hover:cursor-pointer"
-                id={task.id}
-              />
-              <label htmlFor={task.id}>{task.title}</label>
-            </div>
-            <div className="invisible group-hover:visible">
-              <button
-                className="text-slate-500 px-2 rounded-full hover:bg-gray-200 text-xl"
-                onClick={() => handleDeleteTask(task.id)}
-              >
-                <Delete />
-              </button>
-            </div>
-          </li>
+            task={task}
+            onDelete={(id) => deleteTask({ variables: { id } })}
+          />
         ))}
         {createNew && (
           <li className="flex items-center space-x-2 py-3 border-b-2 border-b-gray-200 hover:bg-gray-50">
@@ -210,7 +192,7 @@ function Section({ section, onUpdate, onDelete }: SectionProps) {
             />
           </li>
         )}
-      </ol>
+      </TaskList>
       <button
         className="flex items-center space-x-1 p-2 rounded-lg text-slate-500 hover:bg-gray-100"
         onClick={() => setCreateNew(true)}

@@ -266,6 +266,8 @@ export type DeleteTaskMutation = { __typename?: 'Mutation', deleteTask?: { __typ
 
 export type SectionFragment = { __typename?: 'Section', id: string, title: string, tasks: Array<{ __typename?: 'Task', id: string, title: string }> };
 
+export type TaskListItemFragment = { __typename?: 'Task', id: string, title: string };
+
 export type CreateProjectMutationVariables = Exact<{
   input: CreateProjectInput;
 }>;
