@@ -36,7 +36,7 @@ model Section {
   updatedAt DateTime @updatedAt
   title     String
   tasks     Task[]
-  Project   Project? @relation(fields: [projectId], references: [id])
+  Project   Project? @relation(fields: [projectId], references: [id], onDelete: Cascade)
   projectId String?
 }
 
@@ -48,6 +48,6 @@ model Task {
   done      Boolean  @default(false)
   assignee  User?    @relation(fields: [userId], references: [id])
   userId    String?
-  section   Section  @relation(fields: [sectionId], references: [id])
+  section   Section  @relation(fields: [sectionId], references: [id], onDelete: Cascade)
   sectionId String
 }
