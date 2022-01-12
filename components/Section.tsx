@@ -7,6 +7,8 @@ import {
   DeleteTaskMutationVariables,
   SectionFragment,
   UpdateSectionInput,
+  UpdateTaskMutation,
+  UpdateTaskMutationVariables,
 } from "../generated/graphql";
 import { Delete, Plus } from "../icons";
 import { TaskList } from "./TaskList";
@@ -15,6 +17,17 @@ const CREATE_TASK = gql`
   ${TaskList.Item.fragments.task}
   mutation CreateTask($input: CreateTaskInput!) {
     createTask(input: $input) {
+      task {
+        ...TaskListItem
+      }
+    }
+  }
+`;
+
+const UPDATE_TASK = gql`
+  ${TaskList.Item.fragments.task}
+  mutation UpdateTask($input: UpdateTaskInput!) {
+    updateTask(input: $input) {
       task {
         ...TaskListItem
       }
@@ -85,6 +98,11 @@ function Section({ section, onUpdate, onDelete }: SectionProps) {
       });
     },
   });
+
+  const [updateTask] = useMutation<
+    UpdateTaskMutation,
+    UpdateTaskMutationVariables
+  >(UPDATE_TASK);
 
   const [deleteTask] = useMutation<
     DeleteTaskMutation,
@@ -179,6 +197,7 @@ function Section({ section, onUpdate, onDelete }: SectionProps) {
             key={task.id}
             task={task}
             onDelete={(id) => deleteTask({ variables: { id } })}
+            onUpdate={(input) => updateTask({ variables: { input } })}
           />
         ))}
         {createNew && (

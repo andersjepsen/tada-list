@@ -255,7 +255,14 @@ export type CreateTaskMutationVariables = Exact<{
 }>;
 
 
-export type CreateTaskMutation = { __typename?: 'Mutation', createTask?: { __typename?: 'CreateTaskPayload', task?: { __typename?: 'Task', id: string, title: string } | null | undefined } | null | undefined };
+export type CreateTaskMutation = { __typename?: 'Mutation', createTask?: { __typename?: 'CreateTaskPayload', task?: { __typename?: 'Task', id: string, title: string, done: boolean } | null | undefined } | null | undefined };
+
+export type UpdateTaskMutationVariables = Exact<{
+  input: UpdateTaskInput;
+}>;
+
+
+export type UpdateTaskMutation = { __typename?: 'Mutation', updateTask?: { __typename?: 'UpdateTaskPayload', task?: { __typename?: 'Task', id: string, title: string, done: boolean } | null | undefined } | null | undefined };
 
 export type DeleteTaskMutationVariables = Exact<{
   id: Scalars['UUID'];
@@ -264,9 +271,9 @@ export type DeleteTaskMutationVariables = Exact<{
 
 export type DeleteTaskMutation = { __typename?: 'Mutation', deleteTask?: { __typename?: 'DeleteTaskPayload', task?: { __typename?: 'Task', id: string } | null | undefined } | null | undefined };
 
-export type SectionFragment = { __typename?: 'Section', id: string, title: string, tasks: Array<{ __typename?: 'Task', id: string, title: string }> };
+export type SectionFragment = { __typename?: 'Section', id: string, title: string, tasks: Array<{ __typename?: 'Task', id: string, title: string, done: boolean }> };
 
-export type TaskListItemFragment = { __typename?: 'Task', id: string, title: string };
+export type TaskListItemFragment = { __typename?: 'Task', id: string, title: string, done: boolean };
 
 export type CreateProjectMutationVariables = Exact<{
   input: CreateProjectInput;
@@ -306,4 +313,4 @@ export type GetProjectQueryVariables = Exact<{
 }>;
 
 
-export type GetProjectQuery = { __typename?: 'Query', project?: { __typename?: 'Project', id: string, title: string, sections: Array<{ __typename?: 'Section', id: string, title: string, tasks: Array<{ __typename?: 'Task', id: string, title: string }> }> } | null | undefined };
+export type GetProjectQuery = { __typename?: 'Query', project?: { __typename?: 'Project', id: string, title: string, sections: Array<{ __typename?: 'Section', id: string, title: string, tasks: Array<{ __typename?: 'Task', id: string, title: string, done: boolean }> }> } | null | undefined };
