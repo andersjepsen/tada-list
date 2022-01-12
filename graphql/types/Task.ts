@@ -108,7 +108,7 @@ export const updateTask = mutationField("updateTask", {
       where: { id },
       data: {
         title: patch.title || undefined,
-        done: patch.done || undefined,
+        done: typeof patch.done === "boolean" ? patch.done : undefined,
       },
     });
 

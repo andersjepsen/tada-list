@@ -24,7 +24,7 @@ export const Section = objectType({
               id: parent.id,
             },
           })
-          .tasks();
+          .tasks({ orderBy: [{ createdAt: "asc" }] });
       },
     });
   },
