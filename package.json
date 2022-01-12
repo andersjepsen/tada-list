@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "db:push": "dotenv -e .env.local -- prisma db push",
-    "db:seed": "dotenv -e .env.local -- prisma db seed --preview-feature",
+    "db:seed": "dotenv -e .env.local -- prisma db seed",
     "db:pull": "dotenv -e .env.local -- prisma db pull",
     "migrate:dev": "dotenv -e .env.local -- prisma migrate dev",
     "studio": "dotenv -e .env.local -- prisma studio",
