@@ -4,6 +4,6 @@ module.exports = {
       name: "tada-list-service",
       localSchemaFile: "./generated/schema.graphql",
     },
-    includes: ["./pages/**/*.tsx"],
+    includes: ["./pages/**/*.tsx", "./components/**/*.tsx"],
   },
 };
