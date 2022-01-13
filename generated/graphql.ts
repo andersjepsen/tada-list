@@ -292,6 +292,18 @@ export type UpdateProjectMutationVariables = Exact<{
 
 export type UpdateProjectMutation = { __typename?: 'Mutation', updateProject?: { __typename?: 'UpdateProjectPayload', project?: { __typename?: 'Project', id: string, title: string } | null | undefined } | null | undefined };
 
+export type DeleteProjectMutationVariables = Exact<{
+  id: Scalars['UUID'];
+}>;
+
+
+export type DeleteProjectMutation = { __typename?: 'Mutation', deleteProject?: { __typename?: 'DeleteProjectPayload', project?: { __typename?: 'Project', id: string } | null | undefined } | null | undefined };
+
+export type GetProjectsDeleteQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetProjectsDeleteQuery = { __typename?: 'Query', projects: Array<{ __typename?: 'Project', id: string }> };
+
 export type GetProjectQueryVariables = Exact<{
   id: Scalars['UUID'];
 }>;

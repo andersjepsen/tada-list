@@ -14,9 +14,13 @@ import {
   UpdateProjectMutation,
   UpdateProjectMutationVariables,
   UpdateSectionMutation,
+  DeleteProjectMutation,
+  DeleteProjectMutationVariables,
   UpdateSectionMutationVariables,
+  GetProjectsDeleteQuery,
+  GetProjectsDeleteQueryVariables,
 } from "../../generated/graphql";
-import { Plus } from "../../icons";
+import { Delete, Plus } from "../../icons";
 import { Section as UISection } from "../../ui/Section";
 
 const CREATE_SECTION = gql`
@@ -63,6 +67,24 @@ const UPDATE_PROJECT = gql`
   }
 `;
 
+const DELETE_PROJECT = gql`
+  mutation DeleteProject($id: UUID!) {
+    deleteProject(id: $id) {
+      project {
+        id
+      }
+    }
+  }
+`;
+
+const GET_PROJECTS_DELETE = gql`
+  query GetProjectsDelete {
+    projects {
+      id
+    }
+  }
+`;
+
 const GET_PROJECT = gql`
   ${UISection.fragments.section}
   query GetProject($id: UUID!) {
@@ -97,6 +119,37 @@ const ProjectPage: NextPage = () => {
     UpdateProjectMutation,
     UpdateProjectMutationVariables
   >(UPDATE_PROJECT);
+
+  const [deleteProject] = useMutation<
+    DeleteProjectMutation,
+    DeleteProjectMutationVariables
+  >(DELETE_PROJECT, {
+    update(cache, { data }) {
+      const response = data?.deleteProject?.project;
+
+      if (!response) return;
+
+      const existingProjects =
+        cache.readQuery<GetProjectsDeleteQuery>({
+          query: GET_PROJECTS_DELETE,
+        })?.projects ?? [];
+
+      const newProjects = existingProjects.filter(
+        (project) => project.id !== response.id
+      );
+
+      cache.writeQuery<GetProjectsDeleteQuery>({
+        query: GET_PROJECTS_DELETE,
+
+        data: {
+          projects: newProjects,
+        },
+      });
+    },
+    onCompleted() {
+      router.push("/");
+    },
+  });
 
   const [createSection] = useMutation<
     CreateSectionMutation,
@@ -248,6 +301,14 @@ const ProjectPage: NextPage = () => {
           >
             <Plus />
             <span>Add Section</span>
+          </button>
+
+          <button
+            className="flex items-center space-x-1 p-2 rounded-lg text-slate-500 hover:bg-gray-100"
+            onClick={() => deleteProject({ variables: { id: projectId } })}
+          >
+            <Delete />
+            <span>Delete Project</span>
           </button>
         </div>
       </div>

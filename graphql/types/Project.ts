@@ -39,7 +39,7 @@ export const Project = objectType({
               id: parent.id,
             },
           })
-          .sections({ orderBy: [{ createdAt: "asc" }] });
+          .sections({ orderBy: [{ createdAt: "desc" }] });
       },
     });
   },
