@@ -5,6 +5,8 @@ import { useRouter } from "next/router";
 import React from "react";
 import { Section } from "../../components/Section";
 import {
+  CreateSectionMutation,
+  CreateSectionMutationVariables,
   DeleteSectionMutation,
   DeleteSectionMutationVariables,
   GetProjectQuery,
@@ -14,13 +16,16 @@ import {
   UpdateSectionMutation,
   UpdateSectionMutationVariables,
 } from "../../generated/graphql";
-import { More } from "../../icons";
+import { Plus } from "../../icons";
+import { Section as UISection } from "../../ui/Section";
 
-const DELETE_SECTION = gql`
-  mutation DeleteSection($id: UUID!) {
-    deleteSection(id: $id) {
+const CREATE_SECTION = gql`
+  ${UISection.fragments.section}
+  mutation CreateSection($input: CreateSectionInput!) {
+    createSection(input: $input) {
       section {
         id
+        ...Section
       }
     }
   }
@@ -32,6 +37,16 @@ const UPDATE_SECTION = gql`
       section {
         id
         title
+      }
+    }
+  }
+`;
+
+const DELETE_SECTION = gql`
+  mutation DeleteSection($id: UUID!) {
+    deleteSection(id: $id) {
+      section {
+        id
       }
     }
   }
@@ -49,7 +64,7 @@ const UPDATE_PROJECT = gql`
 `;
 
 const GET_PROJECT = gql`
-  ${Section.fragments.section}
+  ${UISection.fragments.section}
   query GetProject($id: UUID!) {
     project(id: $id) {
       id
@@ -63,6 +78,7 @@ const GET_PROJECT = gql`
 `;
 
 const ProjectPage: NextPage = () => {
+  const [createNewSection, setCreateNewSection] = React.useState(false);
   const [updateTitle, setUpdateTitle] = React.useState(false);
 
   const router = useRouter();
@@ -81,6 +97,41 @@ const ProjectPage: NextPage = () => {
     UpdateProjectMutation,
     UpdateProjectMutationVariables
   >(UPDATE_PROJECT);
+
+  const [createSection] = useMutation<
+    CreateSectionMutation,
+    CreateSectionMutationVariables
+  >(CREATE_SECTION, {
+    update(cache, { data }) {
+      const section = data?.createSection?.section;
+
+      if (!section) return;
+
+      const existingSections =
+        cache.readQuery<GetProjectQuery, GetProjectQueryVariables>({
+          query: GET_PROJECT,
+          variables: {
+            id: projectId,
+          },
+        })?.project?.sections ?? [];
+
+      const newSections = [section, ...existingSections];
+
+      cache.writeQuery<GetProjectQuery, GetProjectQueryVariables>({
+        query: GET_PROJECT,
+        variables: {
+          id: projectId,
+        },
+        data: {
+          project: {
+            id: projectId,
+            title: project?.title ?? "",
+            sections: newSections,
+          },
+        },
+      });
+    },
+  });
 
   const [updateSection] = useMutation<
     UpdateSectionMutation,
@@ -140,6 +191,25 @@ const ProjectPage: NextPage = () => {
     setUpdateTitle(false);
   };
 
+  const handleCreateSection = async (
+    event: React.FocusEvent<HTMLInputElement>
+  ) => {
+    const title = event.target.value;
+
+    if (title) {
+      await createSection({
+        variables: {
+          input: {
+            projectId,
+            title,
+          },
+        },
+      });
+    }
+
+    setCreateNewSection(false);
+  };
+
   if (error) {
     throw error;
   }
@@ -170,13 +240,32 @@ const ProjectPage: NextPage = () => {
           </h1>
         )}
 
-        <button className="text-slate-500 px-2 rounded-full hover:bg-gray-200 text-xl">
-          <More />
-        </button>
+        <div className="flex">
+          <button
+            className="flex items-center space-x-1 p-2 rounded-lg text-slate-500 hover:bg-gray-100"
+            onClick={() => setCreateNewSection(true)}
+            disabled={createNewSection}
+          >
+            <Plus />
+            <span>Add Section</span>
+          </button>
+        </div>
       </div>
 
+      {createNewSection && (
+        <Section>
+          <Section.Header>
+            <input
+              className="text-lg font-semibold rounded"
+              autoFocus
+              onBlur={handleCreateSection}
+            />
+          </Section.Header>
+        </Section>
+      )}
+
       {data?.project?.sections.map((section) => (
-        <Section
+        <UISection
           section={section}
           key={section.id}
           onUpdate={(input) => updateSection({ variables: { input } })}
