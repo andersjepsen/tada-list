@@ -8,14 +8,26 @@ import {
   DeleteTaskMutation,
   DeleteTaskMutationVariables,
   SectionFragment,
+  TaskListItemFragment,
   UpdateSectionInput,
+  UpdateTaskInput,
   UpdateTaskMutation,
   UpdateTaskMutationVariables,
 } from "../generated/graphql";
 import { Delete, Plus } from "../icons";
 
+TaskListItem.fragments = {
+  task: gql`
+    fragment TaskListItem on Task {
+      id
+      title
+      done
+    }
+  `,
+};
+
 const CREATE_TASK = gql`
-  ${TaskList.Item.fragments.task}
+  ${TaskListItem.fragments.task}
   mutation CreateTask($input: CreateTaskInput!) {
     createTask(input: $input) {
       task {
@@ -26,7 +38,7 @@ const CREATE_TASK = gql`
 `;
 
 const UPDATE_TASK = gql`
-  ${TaskList.Item.fragments.task}
+  ${TaskListItem.fragments.task}
   mutation UpdateTask($input: UpdateTaskInput!) {
     updateTask(input: $input) {
       task {
@@ -54,7 +66,7 @@ interface UISectionProps {
 
 UISection.fragments = {
   section: gql`
-    ${TaskList.Item.fragments.task}
+    ${TaskListItem.fragments.task}
     fragment Section on Section {
       id
       title
@@ -192,7 +204,7 @@ function UISection({ section, onUpdate, onDelete }: UISectionProps) {
 
       <TaskList>
         {section.tasks.map((task) => (
-          <TaskList.Item
+          <TaskListItem
             key={task.id}
             task={task}
             onDelete={(id) => deleteTask({ variables: { id } })}
@@ -221,6 +233,71 @@ function UISection({ section, onUpdate, onDelete }: UISectionProps) {
         <span>Add Task</span>
       </button>
     </Section>
+  );
+}
+
+interface TaskListItemProps {
+  task: TaskListItemFragment;
+  onUpdate: (input: UpdateTaskInput) => void;
+  onDelete: (id: string) => void;
+}
+
+function TaskListItem({ task, onDelete, onUpdate }: TaskListItemProps) {
+  const [updateTitle, setUpdateTitle] = React.useState(false);
+
+  const handleUpdateTitle = (event: React.FocusEvent<HTMLInputElement>) => {
+    const title = event.target.value;
+
+    if (title && title !== task.title) {
+      onUpdate({ id: task.id, patch: { title } });
+    }
+
+    setUpdateTitle(false);
+  };
+
+  const handleUpdateDone = (event: React.FocusEvent<HTMLInputElement>) => {
+    const done = event.target.checked;
+
+    onUpdate({ id: task.id, patch: { done } });
+  };
+
+  return (
+    <TaskList.Item>
+      <div className="flex items-center space-x-2">
+        <input
+          type="checkbox"
+          className="appearance-none h-5 w-5 bg-white border-2 rounded-full border-gray-400 checked:border-blue-600 checked:bg-blue-500 hover:cursor-pointer"
+          id={task.id}
+          defaultChecked={task.done}
+          onChange={handleUpdateDone}
+        />
+
+        {updateTitle ? (
+          <input
+            className="rounded"
+            defaultValue={task.title}
+            autoFocus
+            onBlur={handleUpdateTitle}
+          />
+        ) : (
+          <label
+            className="hover:-mb-0.5 hover:border-b-2 hover:border-gray-200 hover:cursor-text"
+            htmlFor={task.id}
+            onClick={() => setUpdateTitle(true)}
+          >
+            {task.title}
+          </label>
+        )}
+      </div>
+      <TaskList.Actions>
+        <button
+          className="text-slate-500 px-2 rounded-full hover:bg-gray-200 text-xl"
+          onClick={() => onDelete(task.id)}
+        >
+          <Delete />
+        </button>
+      </TaskList.Actions>
+    </TaskList.Item>
   );
 }
 
