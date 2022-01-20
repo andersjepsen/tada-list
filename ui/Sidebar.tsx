@@ -90,10 +90,14 @@ function Sidebar() {
   }
 
   if (loading) {
-    return <div>loading...</div>;
+    return (
+      <div className="bg-gray-100 h-screen py-4 pl-4 border-r-2 border-r-gray-200">
+        loading...
+      </div>
+    );
   }
   return (
-    <aside className="w-60 bg-gray-100 h-screen py-4 pl-4 border-r-2 border-r-gray-200">
+    <aside className="bg-gray-100 h-screen py-4 pl-4 border-r-2 border-r-gray-200">
       <Link href="/" passHref>
         <div className="flex space-x-2 items-center text-xl font-bold pb-4 hover:cursor-pointer">
           <div className="text-2xl">🎉</div>

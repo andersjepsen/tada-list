@@ -20,7 +20,7 @@ import {
   GetProjectsDeleteQuery,
   GetProjectsDeleteQueryVariables,
 } from "../../generated/graphql";
-import { Delete, Plus } from "../../icons";
+import { ChevronLeft, Delete, Plus } from "../../icons";
 import { Section as UISection } from "../../ui/Section";
 
 const CREATE_SECTION = gql`
@@ -277,21 +277,29 @@ const ProjectPage: NextPage = () => {
         <title>{data?.project?.title}</title>
       </Head>
       <div className="flex justify-between items-center pb-6">
-        {updateTitle ? (
-          <input
-            className="text-xl font-bold rounded"
-            defaultValue={data?.project?.title}
-            autoFocus
-            onBlur={handleUpdateTitle}
-          />
-        ) : (
-          <h1
-            className="text-xl font-bold hover:-mb-0.5 hover:border-b-2 hover:border-gray-200 hover:cursor-text"
-            onClick={() => setUpdateTitle(true)}
+        <div className="flex">
+          <button
+            className="md:hidden text-slate-500 px-2 rounded-full hover:bg-gray-200 text-xl"
+            onClick={() => router.push("/")}
           >
-            {data?.project?.title}
-          </h1>
-        )}
+            <ChevronLeft />
+          </button>
+          {updateTitle ? (
+            <input
+              className="text-xl font-bold rounded"
+              defaultValue={data?.project?.title}
+              autoFocus
+              onBlur={handleUpdateTitle}
+            />
+          ) : (
+            <h1
+              className="text-xl font-bold hover:-mb-0.5 hover:border-b-2 hover:border-gray-200 hover:cursor-text"
+              onClick={() => setUpdateTitle(true)}
+            >
+              {data?.project?.title}
+            </h1>
+          )}
+        </div>
 
         <div className="flex">
           <button
