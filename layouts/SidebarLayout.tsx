@@ -22,9 +22,9 @@ function SidebarLayout({ children }: { children: React.ReactNode }) {
       <section
         className={`${
           isHome ? "hidden md:block" : "block"
-        } flex-1 lg:max-w-2xl xl:max-w-3xl lg:m-auto h-screen overflow-y-scroll p-4`}
+        } flex-1 h-screen overflow-y-auto p-4`}
       >
-        {children}
+        <div className="lg:max-w-2xl xl:max-w-3xl lg:m-auto">{children}</div>
       </section>
     </div>
   );
