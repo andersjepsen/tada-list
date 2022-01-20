@@ -1,4 +1,5 @@
 import { gql, useMutation, useQuery } from "@apollo/client";
+import { useUser } from "@auth0/nextjs-auth0";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
@@ -33,6 +34,8 @@ function Sidebar() {
   const [createNew, setCreateNew] = React.useState(false);
 
   const router = useRouter();
+
+  const { user } = useUser();
 
   const projectId = router.query?.projectId?.toString() ?? "";
 
@@ -143,6 +146,12 @@ function Sidebar() {
         >
           <Plus /> <span>Add Project</span>
         </button>
+
+        {user ? (
+          <Link href="/api/auth/logout">Logout</Link>
+        ) : (
+          <Link href="/api/auth/login">Login</Link>
+        )}
       </nav>
     </aside>
   );
