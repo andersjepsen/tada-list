@@ -90,7 +90,7 @@ function Sidebar() {
   }
 
   return (
-    <aside className="w-60 bg-gray-100 h-screen py-4 pl-4 border-r-2 border-r-gray-200 relative">
+    <aside className="bg-gray-100 h-screen py-4 pl-4 border-r-2 border-r-gray-200 relative">
       <Link href="/home" passHref>
         <div className="flex space-x-2 items-center text-xl font-bold pb-4 hover:cursor-pointer">
           <div className="text-2xl">🎉</div>

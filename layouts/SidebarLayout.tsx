@@ -6,10 +6,9 @@ function SidebarLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
 
   const isHome = useMemo(() => {
-    return router.asPath === "/";
+    return router.asPath === "/home";
   }, [router]);
 
-  console.log({ isHome });
   return (
     <div className="flex min-h-screen">
       <div
