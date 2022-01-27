@@ -15,9 +15,8 @@ function MyApp({ Component, pageProps }: AppProps) {
           <title>🎉 Tada List</title>
           <link rel="icon" href="/favicon.ico" />
         </Head>
-        <SidebarLayout>
-          <Component {...pageProps} />
-        </SidebarLayout>
+
+        <Component {...pageProps} />
       </ApolloProvider>
     </UserProvider>
   );
