@@ -1,6 +1,4 @@
-import { ApolloError } from "@apollo/client";
 import {
-  idArg,
   inputObjectType,
   mutationField,
   nonNull,
@@ -51,9 +49,6 @@ export const projectsQueryField = queryField((t) => {
     type: nonNull(Project),
 
     resolve(_parent, _args, ctx) {
-      if (!ctx.accessToken) {
-        throw new ApolloError({ errorMessage: "Not authorized!" });
-      }
       return ctx.prisma.project.findMany({ orderBy: [{ createdAt: "asc" }] });
     },
   });
