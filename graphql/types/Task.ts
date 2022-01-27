@@ -6,7 +6,6 @@ import {
   objectType,
   queryField,
 } from "nexus";
-import { User } from "./User";
 
 export const Task = objectType({
   name: "Task",
@@ -16,18 +15,6 @@ export const Task = objectType({
     t.nonNull.dateTime("createdAt");
     t.nonNull.dateTime("updatedAt");
     t.nonNull.boolean("done");
-    t.field("assignee", {
-      type: User,
-      async resolve(parent, _args, ctx) {
-        return await ctx.prisma.task
-          .findUnique({
-            where: {
-              id: parent.id,
-            },
-          })
-          .assignee();
-      },
-    });
   },
 });
 
@@ -133,43 +120,5 @@ export const deleteTask = mutationField("deleteTask", {
   resolve: async (_parent, args, ctx) => {
     const task = await ctx.prisma.task.delete({ where: { id: args.id } });
     return { task };
-  },
-});
-
-export const AssignUserToTaskPayload = objectType({
-  name: "AssignUserToTaskPayload",
-  definition(t) {
-    t.field("task", { type: Task });
-    t.field("user", { type: User });
-  },
-});
-
-export const AssignUserToTaskInput = inputObjectType({
-  name: "AssignUserToTaskInput",
-  definition(t) {
-    t.nonNull.string("taskId");
-    t.nonNull.string("userId");
-  },
-});
-
-export const assignUserToTask = mutationField("assignUserToTask", {
-  type: AssignUserToTaskPayload,
-  args: {
-    input: nonNull(AssignUserToTaskInput),
-  },
-  resolve: async (_parent, { input: { taskId, userId } }, ctx) => {
-    const task = await ctx.prisma.task.update({
-      where: { id: taskId },
-      data: {
-        userId,
-      },
-    });
-
-    const user = await ctx.prisma.user.findUnique({ where: { id: userId } });
-
-    return {
-      task,
-      user,
-    };
   },
 });

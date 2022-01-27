@@ -6,7 +6,6 @@ import {
   queryField,
 } from "nexus";
 import { Section } from "./Section";
-import { User } from "./User";
 
 export const Project = objectType({
   name: "Project",
@@ -16,19 +15,6 @@ export const Project = objectType({
     t.nonNull.dateTime("createdAt");
     t.nonNull.dateTime("updatedAt");
     t.string("description");
-    t.nonNull.list.field("users", {
-      type: User,
-      async resolve(parent, _args, ctx) {
-        return await ctx.prisma.project
-          .findUnique({
-            where: {
-              id: parent.id,
-            },
-          })
-          .users();
-      },
-    });
-
     t.nonNull.list.field("sections", {
       type: nonNull(Section),
       async resolve(parent, _args, ctx) {
@@ -49,7 +35,10 @@ export const projectsQueryField = queryField((t) => {
     type: nonNull(Project),
 
     resolve(_parent, _args, ctx) {
-      return ctx.prisma.project.findMany({ orderBy: [{ createdAt: "asc" }] });
+      return ctx.prisma.project.findMany({
+        where: { createdBy: ctx.user.email },
+        orderBy: [{ createdAt: "asc" }],
+      });
     },
   });
 });
@@ -61,7 +50,9 @@ export const projectQueryField = queryField("project", {
   },
 
   resolve(_parent, args, ctx) {
-    return ctx.prisma.project.findUnique({ where: { id: args.id } });
+    return ctx.prisma.project.findUnique({
+      where: { id: args.id },
+    });
   },
 });
 
@@ -88,6 +79,7 @@ export const createProject = mutationField("createProject", {
   resolve: async (_parent, { input }, ctx) => {
     const project = await ctx.prisma.project.create({
       data: {
+        createdBy: ctx.user.email,
         ...input,
       },
     });
