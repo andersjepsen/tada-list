@@ -10,7 +10,7 @@ function SidebarLayout({ children }: { children: React.ReactNode }) {
   }, [router]);
 
   return (
-    <div className="flex min-h-screen">
+    <div className="flex h-screen overflow-hidden">
       <div
         className={`${
           isHome ? "block" : "hidden md:block"
@@ -21,9 +21,9 @@ function SidebarLayout({ children }: { children: React.ReactNode }) {
       <section
         className={`${
           isHome ? "hidden md:block" : "block"
-        } flex-1 overflow-y-auto p-4`}
+        } flex-1 overflow-y-auto`}
       >
-        <div className=" h-screen lg:max-w-2xl xl:max-w-3xl lg:m-auto">
+        <div className="p-4 h-screen lg:max-w-2xl xl:max-w-3xl lg:m-auto">
           {children}
         </div>
       </section>

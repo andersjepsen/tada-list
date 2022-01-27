@@ -8,7 +8,7 @@ export const getServerSideProps = withPageAuthRequired();
 const Home: NextPage = () => {
   return (
     <SidebarLayout>
-      <main className="flex flex-1 min-h-full items-center justify-center">
+      <main className="flex flex-1 h-full items-center justify-center">
         <Head>
           <title>🎉 Tada List</title>
         </Head>
