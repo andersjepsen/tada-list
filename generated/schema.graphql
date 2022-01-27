@@ -2,16 +2,6 @@
 ### Do not make changes to this file directly
 
 
-input AssignUserToTaskInput {
-  taskId: String!
-  userId: String!
-}
-
-type AssignUserToTaskPayload {
-  task: Task
-  user: User
-}
-
 input CreateProjectInput {
   description: String
   title: String!
@@ -62,7 +52,6 @@ A field whose value conforms to the standard internet email address format as sp
 scalar EmailAddress @specifiedBy(url: "https://www.w3.org/Protocols/rfc822/")
 
 type Mutation {
-  assignUserToTask(input: AssignUserToTaskInput!): AssignUserToTaskPayload
   createProject(input: CreateProjectInput!): CreateProjectPayload
   createSection(input: CreateSectionInput!): CreateSectionPayload
   createTask(input: CreateTaskInput!): CreateTaskPayload
@@ -81,7 +70,6 @@ type Project {
   sections: [Section!]!
   title: String!
   updatedAt: DateTime!
-  users: [User]!
 }
 
 input ProjectInput {
@@ -94,8 +82,6 @@ type Query {
   projects: [Project!]!
   section(id: UUID!): Section
   task(id: UUID!): Task
-  user(id: UUID!): User
-  users: [User]!
 }
 
 type Section {
@@ -111,7 +97,6 @@ input SectionInput {
 }
 
 type Task {
-  assignee: User
   createdAt: DateTime!
   done: Boolean!
   id: UUID!
@@ -154,11 +139,4 @@ input UpdateTaskInput {
 
 type UpdateTaskPayload {
   task: Task
-}
-
-type User {
-  createdAt: DateTime
-  email: EmailAddress
-  id: UUID!
-  name: String
 }

@@ -1,13 +1,15 @@
 import type { PrismaClient } from "@prisma/client";
 import { prisma } from "../lib/prisma";
 
+type User = { [key: string]: any };
+
 export type Context = {
   prisma: PrismaClient;
-  user?: { [key: string]: any };
+  user: User;
 };
 
 interface ContextProps {
-  user?: { [key: string]: any };
+  user: User;
 }
 
 export function createContext(props: ContextProps) {

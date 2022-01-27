@@ -4,12 +4,6 @@ import { projects, sections, tasks } from "../data";
 const prisma = new PrismaClient();
 
 async function main() {
-  await prisma.user.create({
-    data: {
-      email: "test@gmail.com",
-    },
-  });
-
   await prisma.project.createMany({
     data: projects,
   });

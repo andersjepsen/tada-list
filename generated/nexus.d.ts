@@ -45,10 +45,6 @@ declare global {
 }
 
 export interface NexusGenInputs {
-  AssignUserToTaskInput: { // input type
-    taskId: string; // String!
-    userId: string; // String!
-  }
   CreateProjectInput: { // input type
     description?: string | null; // String
     title: string; // String!
@@ -101,10 +97,6 @@ export interface NexusGenScalars {
 }
 
 export interface NexusGenObjects {
-  AssignUserToTaskPayload: { // root type
-    task?: NexusGenRootTypes['Task'] | null; // Task
-    user?: NexusGenRootTypes['User'] | null; // User
-  }
   CreateProjectPayload: { // root type
     project?: NexusGenRootTypes['Project'] | null; // Project
   }
@@ -154,12 +146,6 @@ export interface NexusGenObjects {
   UpdateTaskPayload: { // root type
     task?: NexusGenRootTypes['Task'] | null; // Task
   }
-  User: { // root type
-    createdAt?: NexusGenScalars['DateTime'] | null; // DateTime
-    email?: NexusGenScalars['EmailAddress'] | null; // EmailAddress
-    id: NexusGenScalars['UUID']; // UUID!
-    name?: string | null; // String
-  }
 }
 
 export interface NexusGenInterfaces {
@@ -173,10 +159,6 @@ export type NexusGenRootTypes = NexusGenObjects
 export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars
 
 export interface NexusGenFieldTypes {
-  AssignUserToTaskPayload: { // field return type
-    task: NexusGenRootTypes['Task'] | null; // Task
-    user: NexusGenRootTypes['User'] | null; // User
-  }
   CreateProjectPayload: { // field return type
     project: NexusGenRootTypes['Project'] | null; // Project
   }
@@ -196,7 +178,6 @@ export interface NexusGenFieldTypes {
     task: NexusGenRootTypes['Task'] | null; // Task
   }
   Mutation: { // field return type
-    assignUserToTask: NexusGenRootTypes['AssignUserToTaskPayload'] | null; // AssignUserToTaskPayload
     createProject: NexusGenRootTypes['CreateProjectPayload'] | null; // CreateProjectPayload
     createSection: NexusGenRootTypes['CreateSectionPayload'] | null; // CreateSectionPayload
     createTask: NexusGenRootTypes['CreateTaskPayload'] | null; // CreateTaskPayload
@@ -214,15 +195,12 @@ export interface NexusGenFieldTypes {
     sections: NexusGenRootTypes['Section'][]; // [Section!]!
     title: string; // String!
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
-    users: Array<NexusGenRootTypes['User'] | null>; // [User]!
   }
   Query: { // field return type
     project: NexusGenRootTypes['Project'] | null; // Project
     projects: NexusGenRootTypes['Project'][]; // [Project!]!
     section: NexusGenRootTypes['Section'] | null; // Section
     task: NexusGenRootTypes['Task'] | null; // Task
-    user: NexusGenRootTypes['User'] | null; // User
-    users: Array<NexusGenRootTypes['User'] | null>; // [User]!
   }
   Section: { // field return type
     createdAt: NexusGenScalars['DateTime']; // DateTime!
@@ -232,7 +210,6 @@ export interface NexusGenFieldTypes {
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
   }
   Task: { // field return type
-    assignee: NexusGenRootTypes['User'] | null; // User
     createdAt: NexusGenScalars['DateTime']; // DateTime!
     done: boolean; // Boolean!
     id: NexusGenScalars['UUID']; // UUID!
@@ -248,19 +225,9 @@ export interface NexusGenFieldTypes {
   UpdateTaskPayload: { // field return type
     task: NexusGenRootTypes['Task'] | null; // Task
   }
-  User: { // field return type
-    createdAt: NexusGenScalars['DateTime'] | null; // DateTime
-    email: NexusGenScalars['EmailAddress'] | null; // EmailAddress
-    id: NexusGenScalars['UUID']; // UUID!
-    name: string | null; // String
-  }
 }
 
 export interface NexusGenFieldTypeNames {
-  AssignUserToTaskPayload: { // field return type name
-    task: 'Task'
-    user: 'User'
-  }
   CreateProjectPayload: { // field return type name
     project: 'Project'
   }
@@ -280,7 +247,6 @@ export interface NexusGenFieldTypeNames {
     task: 'Task'
   }
   Mutation: { // field return type name
-    assignUserToTask: 'AssignUserToTaskPayload'
     createProject: 'CreateProjectPayload'
     createSection: 'CreateSectionPayload'
     createTask: 'CreateTaskPayload'
@@ -298,15 +264,12 @@ export interface NexusGenFieldTypeNames {
     sections: 'Section'
     title: 'String'
     updatedAt: 'DateTime'
-    users: 'User'
   }
   Query: { // field return type name
     project: 'Project'
     projects: 'Project'
     section: 'Section'
     task: 'Task'
-    user: 'User'
-    users: 'User'
   }
   Section: { // field return type name
     createdAt: 'DateTime'
@@ -316,7 +279,6 @@ export interface NexusGenFieldTypeNames {
     updatedAt: 'DateTime'
   }
   Task: { // field return type name
-    assignee: 'User'
     createdAt: 'DateTime'
     done: 'Boolean'
     id: 'UUID'
@@ -332,19 +294,10 @@ export interface NexusGenFieldTypeNames {
   UpdateTaskPayload: { // field return type name
     task: 'Task'
   }
-  User: { // field return type name
-    createdAt: 'DateTime'
-    email: 'EmailAddress'
-    id: 'UUID'
-    name: 'String'
-  }
 }
 
 export interface NexusGenArgTypes {
   Mutation: {
-    assignUserToTask: { // args
-      input: NexusGenInputs['AssignUserToTaskInput']; // AssignUserToTaskInput!
-    }
     createProject: { // args
       input: NexusGenInputs['CreateProjectInput']; // CreateProjectInput!
     }
@@ -381,9 +334,6 @@ export interface NexusGenArgTypes {
       id: NexusGenScalars['UUID']; // UUID!
     }
     task: { // args
-      id: NexusGenScalars['UUID']; // UUID!
-    }
-    user: { // args
       id: NexusGenScalars['UUID']; // UUID!
     }
   }

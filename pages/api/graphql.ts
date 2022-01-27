@@ -11,7 +11,7 @@ export default cors(async function handler(req, res) {
 
   const apolloServer = new ApolloServer({
     schema: schema,
-    context: createContext({ user: session?.user }),
+    context: createContext({ user: session?.user ?? {} }),
   });
 
   const startServer = apolloServer.start();
