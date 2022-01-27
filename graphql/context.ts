@@ -3,9 +3,18 @@ import { prisma } from "../lib/prisma";
 
 export type Context = {
   prisma: PrismaClient;
+  user?: { [key: string]: any };
 };
-export async function createContext(): Promise<Context> {
-  return {
-    prisma,
+
+interface ContextProps {
+  user?: { [key: string]: any };
+}
+
+export function createContext(props: ContextProps) {
+  return async function context(): Promise<Context> {
+    return {
+      prisma,
+      ...props,
+    };
   };
 }

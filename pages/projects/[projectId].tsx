@@ -1,4 +1,5 @@
 import { gql, useMutation, useQuery } from "@apollo/client";
+import { withPageAuthRequired } from "@auth0/nextjs-auth0";
 import type { NextPage } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
@@ -7,21 +8,21 @@ import { Section } from "../../components/Section";
 import {
   CreateSectionMutation,
   CreateSectionMutationVariables,
+  DeleteProjectMutation,
+  DeleteProjectMutationVariables,
   DeleteSectionMutation,
   DeleteSectionMutationVariables,
   GetProjectQuery,
   GetProjectQueryVariables,
+  GetProjectsDeleteQuery,
   UpdateProjectMutation,
   UpdateProjectMutationVariables,
   UpdateSectionMutation,
-  DeleteProjectMutation,
-  DeleteProjectMutationVariables,
   UpdateSectionMutationVariables,
-  GetProjectsDeleteQuery,
-  GetProjectsDeleteQueryVariables,
 } from "../../generated/graphql";
-import { ChevronLeft, Delete, Plus } from "../../icons";
+import { SidebarLayout } from "../../layouts/SidebarLayout";
 import { Section as UISection } from "../../ui/Section";
+import { ChevronLeft, Plus, Delete } from "../../icons";
 
 const CREATE_SECTION = gql`
   ${UISection.fragments.section}
@@ -99,6 +100,8 @@ const GET_PROJECT = gql`
   }
 `;
 
+export const getServerSideProps = withPageAuthRequired();
+
 const ProjectPage: NextPage = () => {
   const [createNewSection, setCreateNewSection] = React.useState(false);
   const [updateTitle, setUpdateTitle] = React.useState(false);
@@ -147,7 +150,7 @@ const ProjectPage: NextPage = () => {
       });
     },
     onCompleted() {
-      router.push("/");
+      router.push("/home");
     },
   });
 
@@ -267,81 +270,83 @@ const ProjectPage: NextPage = () => {
     throw error;
   }
 
-  if (loading) {
-    return <div>loading...</div>;
-  }
-
   return (
-    <main>
-      <Head>
-        <title>{data?.project?.title}</title>
-      </Head>
-      <div className="flex justify-between items-center pb-6">
-        <div className="flex">
-          <button
-            className="md:hidden text-slate-500 px-2 rounded-full hover:bg-gray-200 text-xl"
-            onClick={() => router.push("/")}
-          >
-            <ChevronLeft />
-          </button>
-          {updateTitle ? (
-            <input
-              className="text-xl font-bold rounded"
-              defaultValue={data?.project?.title}
-              autoFocus
-              onBlur={handleUpdateTitle}
-            />
-          ) : (
-            <h1
-              className="text-xl font-bold hover:-mb-0.5 hover:border-b-2 hover:border-gray-200 hover:cursor-text"
-              onClick={() => setUpdateTitle(true)}
-            >
-              {data?.project?.title}
-            </h1>
-          )}
-        </div>
+    <SidebarLayout>
+      <main>
+        <Head>
+          <title>{data?.project?.title}</title>
+        </Head>
+        {loading ? (
+          <div>loading...</div>
+        ) : (
+          <div className="flex justify-between items-center pb-6">
+            <div className="flex">
+              <button
+                className="md:hidden text-slate-500 px-2 rounded-full hover:bg-gray-200 text-xl"
+                onClick={() => router.push("/")}
+              >
+                <ChevronLeft />
+              </button>
+              {updateTitle ? (
+                <input
+                  className="text-xl font-bold rounded"
+                  defaultValue={data?.project?.title}
+                  autoFocus
+                  onBlur={handleUpdateTitle}
+                />
+              ) : (
+                <h1
+                  className="text-xl font-bold hover:-mb-0.5 hover:border-b-2 hover:border-gray-200 hover:cursor-text"
+                  onClick={() => setUpdateTitle(true)}
+                >
+                  {data?.project?.title}
+                </h1>
+              )}
+            </div>
 
-        <div className="flex">
-          <button
-            className="flex items-center space-x-1 p-2 rounded-lg text-slate-500 hover:bg-gray-100"
-            onClick={() => setCreateNewSection(true)}
-            disabled={createNewSection}
-          >
-            <Plus />
-            <span>Add Section</span>
-          </button>
+            <div className="flex">
+              <button
+                className="flex items-center space-x-1 p-2 rounded-lg text-slate-500 hover:bg-gray-100"
+                onClick={() => setCreateNewSection(true)}
+                disabled={createNewSection}
+              >
+                <Plus />
+                <span>Add Section</span>
+              </button>
 
-          <button
-            className="flex items-center space-x-1 p-2 rounded-lg text-slate-500 hover:bg-gray-100"
-            onClick={() => deleteProject({ variables: { id: projectId } })}
-          >
-            <Delete />
-            <span>Delete Project</span>
-          </button>
-        </div>
-      </div>
+              <button
+                className="flex items-center space-x-1 p-2 rounded-lg text-slate-500 hover:bg-gray-100"
+                onClick={() => deleteProject({ variables: { id: projectId } })}
+              >
+                <Delete />
+                <span>Delete Project</span>
+              </button>
+            </div>
+          </div>
+        )}
 
-      {createNewSection && (
-        <Section>
-          <Section.Header>
-            <input
-              className="text-lg font-semibold rounded"
-              autoFocus
-              onBlur={handleCreateSection}
-            />
-          </Section.Header>
-        </Section>
-      )}
+        {createNewSection && (
+          <Section>
+            <Section.Header>
+              <input
+                className="text-lg font-semibold rounded"
+                autoFocus
+                onBlur={handleCreateSection}
+              />
+            </Section.Header>
+          </Section>
+        )}
 
-      {data?.project?.sections.map((section) => (
-        <UISection
-          section={section}
-          key={section.id}
-          onUpdate={(input) => updateSection({ variables: { input } })}
-          onDelete={(id) => deleteSection({ variables: { id } })}
-        />
-      ))}
-    </main>
+        {data?.project?.sections.map((section) => (
+          <UISection
+            section={section}
+            key={section.id}
+            onUpdate={(input) => updateSection({ variables: { input } })}
+            onDelete={(id) => deleteSection({ variables: { id } })}
+          />
+        ))}
+      </main>
+    </SidebarLayout>
   );
 };
 

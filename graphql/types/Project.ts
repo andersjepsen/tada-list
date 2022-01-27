@@ -1,5 +1,4 @@
 import {
-  idArg,
   inputObjectType,
   mutationField,
   nonNull,
